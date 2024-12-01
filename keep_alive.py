@@ -36,6 +36,7 @@ def send_notification():
     return jsonify({"success": True, "message_id": response}), 200
 
 def test_code(message):
+    i = 0
     while True:
       print("Running", i)
       i+= 1
