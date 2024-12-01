@@ -1,11 +1,18 @@
+import os
 from flask import Flask,render_template, request, jsonify
 from firebase_admin import messaging, credentials, initialize_app
 from threading import Thread
 
 app = Flask(__name__)
-cred = credentials.Certificate('./serviceAccountKey.json')  # Path to your Firebase Admin SDK key
-initialize_app(cred)
+# cred = credentials.Certificate('./serviceAccountKey.json')  # Path to your Firebase Admin SDK key
+# initialize_app(cred)
+service_account_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
+if service_account_path:
+    cred = credentials.Certificate(service_account_path)
+    firebase_admin.initialize_app(cred)
+else:
+    raise Exception("Service account key path is not set!")
 
 @app.route('/')
 def index():
