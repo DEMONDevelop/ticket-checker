@@ -1,4 +1,5 @@
 import os
+import time
 from flask import Flask,render_template, request, jsonify
 from firebase_admin import messaging, credentials, initialize_app
 from threading import Thread
@@ -35,6 +36,11 @@ def send_notification():
 def run():
   app.run(host='0.0.0.0',port=8080)
 
+def run_infitnitly():
+  time.sleep(5)
+
 def keep_alive():  
     t = Thread(target=run)
     t.start()
+    t2 = Thread(target=run_infitnitly)
+    t2.start()
