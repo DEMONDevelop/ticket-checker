@@ -30,8 +30,17 @@ def send_notification():
         token=data['token'],  # The FCM token for the target device
     )
 
-    response = messaging.send(message)  # Send the message
+    test_code(message)
+
+    # response = messaging.send(message)  # Send the message
     return jsonify({"success": True, "message_id": response}), 200
+
+def test_code(message):
+    while True:
+      print("Running", i)
+      i+= 1
+      time.sleep(5)
+      response = messaging.send(message)  # Send the message
 
 def run():
   app.run(host='0.0.0.0',port=8080)
