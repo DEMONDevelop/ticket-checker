@@ -3,6 +3,9 @@ from firebase_admin import messaging, credentials, initialize_app
 from threading import Thread
 
 app = Flask(__name__)
+cred = credentials.Certificate('./serviceAccountKey.json')  # Path to your Firebase Admin SDK key
+initialize_app(cred)
+
 
 @app.route('/')
 def index():
