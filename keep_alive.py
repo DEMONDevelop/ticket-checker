@@ -7,6 +7,20 @@ app = Flask(__name__)
 def index():
     return "Alive"
 
+@app.route('/send-notification', methods=['POST'])
+def send_notification():
+    data = request.json
+    message = messaging.Message(
+        notification=messaging.Notification(
+            title=data['title'],
+            body=data['body'],
+        ),
+        token=data['token'],  # The FCM token for the target device
+    )
+
+    response = messaging.send(message)  # Send the message
+    return jsonify({"success": True, "message_id": response}), 200
+
 def run():
   app.run(host='0.0.0.0',port=8080)
 
