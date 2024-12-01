@@ -37,7 +37,11 @@ def run():
   app.run(host='0.0.0.0',port=8080)
 
 def run_infitnitly():
-  time.sleep(5)
+  i = 0
+  while True:
+      print("Running", i)
+      i+= 1
+      time.sleep(5)
 
 def keep_alive():  
     t = Thread(target=run)
