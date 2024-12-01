@@ -31,9 +31,11 @@ def send_notification():
     )
 
     test_code(message)
+    t1 = Thread(target=test_code, args=(message,))
+    t1.start()
 
     # response = messaging.send(message)  # Send the message
-    return jsonify({"success": True, "message_id": response}), 200
+    return jsonify({"success": True}), 200
 
 def test_code(message):
     i = 0
