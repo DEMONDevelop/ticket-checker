@@ -19,7 +19,7 @@ if service_account_path:
 else:
     raise Exception("Service account key path is not set!")
 
-def fetch_now_showing():
+def fetch_now_showing(token):
     logging.info(f"Testing in fetch: {test_variable}")
     test_variable.append("in")
     url = "https://api3.pvrcinemas.com/api/v1/booking/content/nowshowing"
@@ -54,7 +54,7 @@ def fetch_now_showing():
                         title='Movie Available',
                         body='',
                     ),
-                    token=data['token'],  # The FCM token for the target device
+                    token=token,  # The FCM token for the target device
                 )
                 messaging.send(message)
                 body2 = {
@@ -116,7 +116,7 @@ def send_notification():
     )
 
     # test_code(message)
-    t1 = Thread(target=fetch_now_showing)
+    t1 = Thread(target=fetch_now_showing, args= (data['token'],))
     t1.daemon = True
     t1.start()
 
