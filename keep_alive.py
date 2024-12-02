@@ -87,7 +87,7 @@ def fetch_now_showing(token):
                                     title='In Escape Movie Available',
                                     body='',
                                 ),
-                                token=data['token'],  # The FCM token for the target device
+                                token=token,  # The FCM token for the target device
                             )
                             messaging.send(message)
                 except requests.exceptions.RequestException as e:
