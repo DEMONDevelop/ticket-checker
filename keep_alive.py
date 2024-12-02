@@ -20,6 +20,7 @@ else:
     raise Exception("Service account key path is not set!")
 
 def fetch_now_showing():
+    logging.info(f"Testing in fetch: {test_variable}")
     test_variable.append("in")
     url = "https://api3.pvrcinemas.com/api/v1/booking/content/nowshowing"
     headers = {
@@ -48,6 +49,14 @@ def fetch_now_showing():
             if('solo' in i['filmName'].lower()):
                 print('Solo test done. It works')
                 logging.info('Solo test done. It works')
+                message = messaging.Message(
+                    notification=messaging.Notification(
+                        title='Movie Available',
+                        body='',
+                    ),
+                    token=data['token'],  # The FCM token for the target device
+                )
+                messaging.send(message)
                 body2 = {
                     "city": "Chennai",
                     "mid": i['id'],
@@ -73,6 +82,14 @@ def fetch_now_showing():
                         if('escape' in j['cinema']['name'].lower()):
                             print("Solo available in esacape")
                             logging.info("Solo available in esacape")
+                            message = messaging.Message(
+                                notification=messaging.Notification(
+                                    title='In Escape Movie Available',
+                                    body='',
+                                ),
+                                token=data['token'],  # The FCM token for the target device
+                            )
+                            messaging.send(message)
                 except requests.exceptions.RequestException as e:
                     print(f"An error occurred in 2nd request: {e}")
                     return None
