@@ -12,12 +12,19 @@ app = Flask(__name__)
 service_account_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 test_variable = []
+thread = None
+fetching = True
 
 if service_account_path:
     cred = credentials.Certificate(service_account_path)
     initialize_app(cred)
 else:
     raise Exception("Service account key path is not set!")
+
+def fetching_in_loop(token):
+    while fetching: 
+        fetch_now_showing(token)
+        time.sleep(30)
 
 def fetch_now_showing(token):
     logging.info(f"Testing in fetch: {test_variable}")
@@ -115,10 +122,16 @@ def send_notification():
         token=data['token'],  # The FCM token for the target device
     )
 
+    if(data['stop']):
+        fetching = False
+        thread.join()
+        thread = None
+
     # test_code(message)
-    t1 = Thread(target=fetch_now_showing, args= (data['token'],))
-    t1.daemon = True
-    t1.start()
+    else:
+        thread = Thread(target=fetching_in_loop, args= (data['token'],))
+        thread.daemon = True
+        thread.start()
 
     # response = messaging.send(message)  # Send the message
     return jsonify({"success": True}), 200
