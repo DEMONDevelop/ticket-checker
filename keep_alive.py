@@ -72,6 +72,7 @@ def fetch_now_showing():
                     for j in cinemas:
                         if('escape' in j['cinema']['name'].lower()):
                             print("Solo available in esacape")
+                            logging.info("Solo available in esacape")
                 except requests.exceptions.RequestException as e:
                     print(f"An error occurred in 2nd request: {e}")
                     return None
