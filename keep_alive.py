@@ -134,14 +134,14 @@ def send_notification():
         fetching = False
         for i in thread_list:
             i.join()
-        thread_list = None
+        thread_list = []
 
     # test_code(message)
     else:
         thread = Thread(target=fetching_in_loop, args= (data['token'],))
         thread.daemon = True
         thread.start()
-        thread_list.append(thread)
+        # thread_list.append(thread)
 
     # response = messaging.send(message)  # Send the message
     return jsonify({"success": True}), 200
