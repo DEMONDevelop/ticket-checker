@@ -65,10 +65,10 @@ def fetch_now_showing():
                 url2 = 'https://api3.pvrcinemas.com/api/v1/booking/content/msessions'
                 try:
                     response2 = requests.post(url2, json=body2, headers=headers)
-                    response.raise_for_status()  # Raise an HTTPError if the response status is 4xx/5xx
-                    res = response.json()
-                    logging.info(f"Issue of key {i['id']} with res: {res['output'].keys()}")
-                    cinemas = res['output']['movieCinemaSessions']
+                    response2.raise_for_status()  # Raise an HTTPError if the response status is 4xx/5xx
+                    res2 = response2.json()
+                    logging.info(f"Issue of key {i['id']} with res: {res2['output'].keys()}")
+                    cinemas = res2['output']['movieCinemaSessions']
                     for j in cinemas:
                         if('escape' in j['cinema']['name'].lower()):
                             print("Solo available in esacape")
@@ -87,6 +87,7 @@ def index():
 @app.route('/send-notification', methods=['POST'])
 def send_notification():
     print("Testing", test_variable)
+    logging.info(f"Testing: {test_variable}")
     data = request.json
     message = messaging.Message(
         notification=messaging.Notification(
