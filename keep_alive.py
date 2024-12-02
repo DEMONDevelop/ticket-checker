@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 import requests
@@ -9,7 +10,7 @@ app = Flask(__name__)
 # cred = credentials.Certificate('./serviceAccountKey.json')  # Path to your Firebase Admin SDK key
 # initialize_app(cred)
 service_account_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 test_variable = []
 
 if service_account_path:
@@ -42,9 +43,11 @@ def fetch_now_showing():
         movies = res['output']['mv']
         mvNames = [x['filmName'].lower() for x in movies]
         print("Available movies", mvNames)
+        logging.info(f"Available movies: {mvNames}")
         for i in movies:
             if('solo' in i['filmName'].lower()):
                 print('Solo test done. It works')
+                logging.info('Solo test done. It works')
                 body2 = {
                     "city": "Chennai",
                     "mid": i['id'],
@@ -64,6 +67,7 @@ def fetch_now_showing():
                     response2 = requests.post(url2, json=body2, headers=headers)
                     response.raise_for_status()  # Raise an HTTPError if the response status is 4xx/5xx
                     res = response.json()
+                    logging.info(f"Issue with res: {res['output']}"])
                     cinemas = res['output']['movieCinemaSessions']
                     for j in cinemas:
                         if('escape' in j['cinema']['name'].lower()):
