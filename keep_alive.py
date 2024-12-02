@@ -67,7 +67,7 @@ def fetch_now_showing():
                     response2 = requests.post(url2, json=body2, headers=headers)
                     response.raise_for_status()  # Raise an HTTPError if the response status is 4xx/5xx
                     res = response.json()
-                    logging.info(f"Issue with res: {res['output']}"])
+                    logging.info(f"Issue with res: {res['output']}")
                     cinemas = res['output']['movieCinemaSessions']
                     for j in cinemas:
                         if('escape' in j['cinema']['name'].lower()):
