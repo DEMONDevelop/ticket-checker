@@ -12,7 +12,7 @@ app = Flask(__name__)
 service_account_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 test_variable = []
-thread = None
+thread_list = []
 fetching = True
 
 if service_account_path:
@@ -24,11 +24,19 @@ else:
 def fetching_in_loop(token):
     while fetching: 
         fetch_now_showing(token)
-        time.sleep(30)
+        time.sleep(300)
 
 def fetch_now_showing(token):
     logging.info(f"Testing in fetch: {test_variable}")
     test_variable.append("in")
+    message = messaging.Message(
+        notification=messaging.Notification(
+            title='Service Available ',
+            body='',
+        ),
+        token=token,
+    )
+    messaging.send(message)
     url = "https://api3.pvrcinemas.com/api/v1/booking/content/nowshowing"
     headers = {
         "appversion": "1.0",
@@ -53,7 +61,7 @@ def fetch_now_showing(token):
         print("Available movies", mvNames)
         logging.info(f"Available movies: {mvNames}")
         for i in movies:
-            if('solo' in i['filmName'].lower()):
+            if('pushpa' in i['filmName'].lower()):
                 print('Solo test done. It works')
                 logging.info('Solo test done. It works')
                 message = messaging.Message(
@@ -124,14 +132,16 @@ def send_notification():
 
     if(data['stop']):
         fetching = False
-        thread.join()
-        thread = None
+        for i in thread_list:
+            i.join()
+        thread_list = None
 
     # test_code(message)
     else:
         thread = Thread(target=fetching_in_loop, args= (data['token'],))
         thread.daemon = True
         thread.start()
+        thread_list.append(thread)
 
     # response = messaging.send(message)  # Send the message
     return jsonify({"success": True}), 200
