@@ -1,5 +1,6 @@
 import os
 import time
+import requests
 from flask import Flask,render_template, request, jsonify
 from firebase_admin import messaging, credentials, initialize_app
 from threading import Thread
@@ -18,6 +19,7 @@ else:
     raise Exception("Service account key path is not set!")
 
 def fetch_now_showing():
+    test_variable.append("in")
     url = "https://api3.pvrcinemas.com/api/v1/booking/content/nowshowing"
     headers = {
         "appversion": "1.0",
@@ -80,6 +82,7 @@ def index():
 
 @app.route('/send-notification', methods=['POST'])
 def send_notification():
+    print("Testing", test_variable)
     data = request.json
     message = messaging.Message(
         notification=messaging.Notification(
